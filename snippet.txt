@@ -1,0 +1,51 @@
+ /**
+         * Get all the messages of the user for side bar
+         * @param int $user ID of the user (sender), current user
+         * @return array all messages
+         */
+        public function getUserAllMessages($user) {
+            $output = '';
+
+            $sql = "SELECT * FROM users INNER JOIN users_settings ON users.user_id = users_settings.user INNER JOIN users_details ON users_settings.user = users_details.users_id WHERE NOT user_id = :u ORDER BY user_id DESC";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':u', $user, PDO::PARAM_STR);
+            if ($stmt->execute()) {
+                $user_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                if ($stmt->rowCount() > 0) {
+
+                        foreach ($user_data as $row) {
+                   
+                            $sql2 = "SELECT * FROM messages WHERE (receiver = :m
+                         OR sender = :m) AND (sender = :u
+                         OR receiver = :u) ORDER BY message_id DESC LIMIT 1";
+                            $stmt2 = $this->db->prepare($sql2);
+                            $stmt2->bindParam(':u', $user, PDO::PARAM_INT);
+                            $stmt2->bindParam(':m', $row['user_id'], PDO::PARAM_INT);
+                            $stmt2->execute();        
+                            $message = $stmt2->fetchAll(PDO::FETCH_ASSOC);
+                            foreach ($message as $res) {
+                               
+                                $name = (!empty($row['first_name'] && !empty($row['last_name']))) ? $row['first_name'] . ' '. $row['last_name'] : $row['username'];
+                            
+                            $output .= '<a href="#" class="list-group-item list-group-item-action border-0">
+                            <div class="badge bg-success float-end">5</div>
+                            <div class="d-flex align-items-start">
+                                <img src="'. BASE_URL .'/uploads/'. $row['profile_image'] .'" class="rounded-circle me-1" alt="Vanessa Tucker" width="40" height="40">
+                                <div class="flex-grow-1 ms-3">
+                                    '. $name . '
+                                    <div class="small"><span class="fas fa-circle chat-online"></span> Online</div>
+                                </div>
+                            </div>
+                        </a>';
+                            }
+                     }
+
+                     echo $output;
+                    
+                }
+
+            } 
+            
+               
+             
+        }

@@ -1,0 +1,13 @@
+Options +FollowSymLinks
+RewriteEngine on
+RewriteBase /
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+RewriteRule ^c/(.+)/?$ confession.php?id=$1 [L]
+RewriteRule ^user/(.*/([a-zA-Z0-9_-]+)|([a-zA-Z0-9_-]+))/?$ profile.php?username=$1 [L]
+
+RewriteRule login login.php
+RewriteRule register register.php
+
+ErrorDocument 404 /includes/404.php
