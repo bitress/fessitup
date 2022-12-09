@@ -50,10 +50,10 @@ $(document).ready(function () {
 
 $(document).ready(function (){
 
-    $('#challengeBtn').bind('click', function (e) {
+    $('#challengeBtn').on('click', function (e) {
         e.preventDefault();
 
-        var code = $('code').val();
+        var code = $('#code').val();
 
         $.ajax({
             type: 'POST',
@@ -70,7 +70,7 @@ $(document).ready(function (){
                     showSuccessToasts("You are now logged in. Redirecting...");
                     setTimeout('window.location = "/";', 3000);
                 } else {
-                    showErrorToasts(result);
+                    showErrorToasts(res);
                         $('#challengeBtn').html('&nbsp; Submit');
                         $('#alert_box').html('<div class="alert alert-danger alert-dismissible fade show" role="alert">'+ res +' <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div></div>');
                 }

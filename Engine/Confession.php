@@ -54,27 +54,27 @@
          * @return boolean TRUE if good
          */
 
-         public function postLink($link){
+        //  public function postLink($link){
 
-            $user = (User::_isLoggedIn()) ? Session::get('user_login') : Misc::getUserIpAddr();
-            $type = (User::_isLoggedIn()) ? 'user' : 'visitor';
+        //     $user = (User::_isLoggedIn()) ? Session::get('user_login') : Misc::getUserIpAddr();
+        //     $type = (User::_isLoggedIn()) ? 'user' : 'visitor';
     
-            // Generated confession unique id
-            $uniqueid = Misc::generateUniqueID();
-            $time = date('Y-m-d H:i:s');
-                $sql = "INSERT INTO confessions (unique_id, link, user, type, date_posted) VALUES (:id, :url, :user, :type, :time)";
+        //     // Generated confession unique id
+        //     $uniqueid = Misc::generateUniqueID();
+        //     $time = date('Y-m-d H:i:s');
+        //         $sql = "INSERT INTO confessions (unique_id, link, user, type, date_posted) VALUES (:id, :url, :user, :type, :time)";
 
-            $stmt = $this->db->prepare($sql);
-            $stmt->bindParam(':url', $link, PDO::PARAM_STR);
-            $stmt->bindParam(':user', $user, PDO::PARAM_STR);
-            $stmt->bindParam(':type', $type, PDO::PARAM_STR);
-            $stmt->bindParam(':id', $uniqueid, PDO::PARAM_STR);
-            $stmt->bindParam(':time', $time, PDO::PARAM_STR);
-                if($stmt->execute()){
-                    echo $uniqueid;
-                }
+        //     $stmt = $this->db->prepare($sql);
+        //     $stmt->bindParam(':url', $link, PDO::PARAM_STR);
+        //     $stmt->bindParam(':user', $user, PDO::PARAM_STR);
+        //     $stmt->bindParam(':type', $type, PDO::PARAM_STR);
+        //     $stmt->bindParam(':id', $uniqueid, PDO::PARAM_STR);
+        //     $stmt->bindParam(':time', $time, PDO::PARAM_STR);
+        //         if($stmt->execute()){
+        //             echo $uniqueid;
+        //         }
 
-         }
+        //  }
 
         /**
          * Return all confession from the database

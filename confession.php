@@ -26,6 +26,7 @@ $fess = $cfs->getConfessionByID($confession_id);
 	<title>Confession | FessItUp</title>
 
 	<link href="<?= BASE_URL ?>/dist/css/app.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style.css">
     <script>
     //User ID

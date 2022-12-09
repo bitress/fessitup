@@ -11,6 +11,7 @@
             $this->register = new Register(); 
             $this->userID = Session::get('user_login');
             $this->encrypt = new Encrypt();
+            
         }
         
         /**
@@ -82,9 +83,10 @@
         
         public function _getID($username){
 
-            $sql = "SELECT user_id FROM users WHERE username = :u";
+            $sql = "SELECT user_id FROM users WHERE username = :u OR email = :e";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':u', $username, PDO::PARAM_STR);
+            $stmt->bindParam(':e', $username, PDO::PARAM_STR);
             if($stmt->execute()){
               $res = $stmt->fetch();
             }
@@ -116,7 +118,7 @@
               return;
           }
 
-          if($this->register->_validateEmail($email)){
+          if($this->register->_validateEmail($email, $this->userID, true)){
             echo "Email has been taken already";
             return;
         }
@@ -175,7 +177,7 @@
              return true;
            }
 
-          } catch (\Throwable $th) {
+          } catch (\Exception $th) {
             throw $th;
           }
             
@@ -291,6 +293,8 @@
             }
 
         }
+
+       
 
         /**
          * Validate password fields

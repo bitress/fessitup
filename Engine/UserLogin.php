@@ -5,12 +5,12 @@
         private $db;
 
         private $encrypt;
+
      
     
      public function __construct(){
       	 $this->db = Database::getInstance();
-        $this->encrypt = new Encrypt();
-        $this->_2fa = new TwoFactorAuthentication;
+         $this->encrypt = new Encrypt();
      }
 
 
@@ -22,6 +22,7 @@
     */
     public function userLogin($email, $password, $csrf_token, $remember) {
         
+
         if(empty($email)){
             echo "Username or email is required.";
             return;
@@ -32,11 +33,11 @@
             return;
         }
 
-        //REMOVE DUE TO BUG
-        // if(CSRF::check($csrf_token)) {
-        //     echo "Invalid Login Token.";
-        //     return;
-        // }
+      #  REMOVED DUE TO BUG
+        if(CSRF::check($csrf_token)) {
+            echo "Invalid Login Token.";
+            return;
+        }
 
         
         $sql = "SELECT * FROM users WHERE username = :u OR email = :u";
@@ -49,7 +50,7 @@
                             $id = $row['user_id'];
                             $usertoken = $row['token'];
                             $username = $row['username'];
-                            $_2fa = $row['is_2fa'];
+                            $is_2fa = ($row['is_2fa'] != '1') ? true : false ;
                             $secret_key = $row['secret_key'];
 
                             $token = $this->encrypt->encryptString($usertoken);
@@ -66,12 +67,19 @@
                                 return false;
                             }
 
+                             
+                         
+                  
+
                             if ($this->verifyPassword($password, $psk)) {   
                                 
                                     Session::set('secret_key', $secret_key);
 
-                                    if ($_2fa != '1') {
-
+                                    if (!empty($remember)) {
+                                        Cookie::_set('user', ($token));
+                                    }
+                                    if ($is_2fa OR $this->_checkSessionFingerprint($id)) {
+                                        # If User Turned on 2FA run this code
                                         Session::set('user_login', $id);
                                         Session::set('fingerprint', Misc::_generateLoginString());
                                         Session::set('token', ($token));
@@ -80,16 +88,18 @@
                                         $this->_updateUserSession($id);
                                         return true;
                                     } else {
-
+                                        # Run this, otherwise
+                                       $arr = array('user_login' => $id,
+                                                    'fingerprint' =>  Misc::_generateLoginString(),
+                                                    'token'=> $token,
+                                                    'cu' => $hashed_id,
+                                                    'erfcy' => base64_encode($username));
+                                        Session::set('why', $arr);
                                         Session::set('challenge', true);
                                         echo "no";
                                     }
 
-                                
-                                if (!empty($remember)) 
-                                    
-                                    Cookie::_set('user', ($token));
-                          
+                               
 
                             } else {
                                 echo "The passsword you've entered was incorrect. ";
@@ -107,17 +117,7 @@
 
     }
 
-    public function _2faLogin($code){
-
-        $user = Session::get('-_-');
-       
-
-        if ($this->_2fa->verifyCode($code, $user)) {
-
-            return true;
-        }
-
-    }
+  
 
     /**
      * Increase users login attempt when password entered is wrong
@@ -173,7 +173,7 @@
         
     }
 
-    private function _updateUserSession($user_id) {
+    public function _updateUserSession($user_id) {
         $date = date('Y-m-d h:i:s');
         $currentFingerprint = Misc::_generateLoginString();
         $userSession = $this->_checkSessionFingerprint($user_id);
@@ -191,7 +191,7 @@
 
 
 
-        if ($userSession > 0) {
+        if ($userSession) {
             $stmt = $this->db->prepare('UPDATE login_sessions SET datetime = :d WHERE fingerprint = :fp AND user_id = :u');
             // $stmt->execute([$user_ip,$date]);
             $stmt->bindParam(':fp', $userFingerprint, PDO::PARAM_STR);
@@ -211,7 +211,7 @@
     /**
      * Check user session in database
      * @param int $user_id ID of user
-     * @return boolean TRUE if
+     * @return boolean TRUE 
      */
     private function _checkSessionFingerprint($user_id) {
 
@@ -228,9 +228,9 @@
             // $currentFingerprint = Misc::_generateLoginString();
 
             if ($stmt->rowCount() == 0) {
-                return 0;
+                return false;
             } else {
-                return 1;
+                return true;
             }
 
         }

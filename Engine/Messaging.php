@@ -39,7 +39,7 @@
          * @param int $user ID of the user (sender), current user
          * @return array all messages
          */
-        public function getUserAllMessages($user) {
+        public function getUserAllMessages($user, $dropdown = true) {
         
 
             $sql = "SELECT * FROM users INNER JOIN users_settings ON users.user_id = users_settings.user INNER JOIN users_details ON users_settings.user = users_details.users_id WHERE NOT user_id = :u ORDER BY user_id DESC";
@@ -49,9 +49,54 @@
                 $user_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 if ($stmt->rowCount() > 0) {
 
-                        return $user_data;
+                    foreach ($user_data as $row) {
+                   
+                        $sql2 = "SELECT * FROM messages WHERE (receiver = :m
+                     OR sender = :m) AND (sender = :u
+                     OR receiver = :u) ORDER BY message_id DESC ";
+                        $stmt2 = $this->db->prepare($sql2);
+                        $stmt2->bindParam(':u', $user, PDO::PARAM_INT);
+                        $stmt2->bindParam(':m', $row['user_id'], PDO::PARAM_INT);
+                        $stmt2->execute();        
+                        $message = $stmt2->fetchAll(PDO::FETCH_ASSOC);
+                        foreach ($message as $res) {
+
+                            $you = $user == $res['sender'] ? "You: " : "";
+
+                            //Made this because my knowledge is low yet
+                            $users = array('username' => $row['username'],
+                                            'name' => $row['first_name'] . $row['last_name'],
+                                            'user_id' => $row['user_id'],
+                                            'profile_image' => $row['profile_image']);
+
+                            if (!empty($res)) {
+                                $mes = array('message_id' => $res['message_id'],
+                        'sender' => $res['sender'],
+                        'receiver' => $res['receiver'],
+                        'message' => $you . $res['message'],
+                        'status' => $res['status'],
+                        'date_created' => $res['date_created']
+                        );
+                            } else {
+                                $mes = array();
+                            }
+                           
+                            //End of made this
+
+
+                           if ($dropdown) {
+                            return array_merge($users,
+                            $mes );
+                           } else {
+                            return $user_data;
+                           }
+                           
+                       
                     
                 }
+
+            }
+        }
 
             } 
             

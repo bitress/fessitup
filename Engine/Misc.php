@@ -125,6 +125,32 @@
       }  
  }  
 
+
+ public static function greetUser($user) {
+      $time = date('H');;
+
+      switch (true) {
+        case $time < "12" :
+          return "Good morning, ".$user."!";
+          break;
+        case $time >= "12" && $time < "17":
+          return "Good afternoon, ".$user."!";
+          break;
+        case $time >= "17" && $time < "19":
+          return "Good evening, ".$user."!";
+          break;
+        case $time >= "19":
+          return "Good night, ".$user."!";
+          break;
+        
+        default:
+          # code...
+          break;
+      }
+
+      
+ }
+
     
     }
 ?>

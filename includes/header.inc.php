@@ -1,4 +1,4 @@
-<nav id="sidebar" class="sidebar">
+<nav id="sidebar" class="sidebar js-sidebar">
 			<div class="sidebar-content js-simplebar">
 				<a class="sidebar-brand" href="#">
           <span class="align-middle">FessItUp</span>
@@ -92,9 +92,10 @@ endif;
 
 		<div class="main">
 			<nav class="navbar navbar-expand navbar-light navbar-bg">
-				<a class="sidebar-toggle d-flex">
-          <i class="hamburger align-self-center"></i>
-        </a>
+				<a class="sidebar-toggle js-sidebar-toggle">
+					<i class="hamburger align-self-center"></i>
+				</a>
+
 
 				<form class="d-none d-sm-inline-block">
 					<div class="input-group input-group-navbar">
@@ -178,12 +179,7 @@ endif;
               	  </a>
                             <div class="dropdown-menu dropdown-menu-end">
 							<span class="dropdown-item-text">Hello, @<?=$row['username'];?></span>
-								<span class="dropdown-item">
-										<label class="switch">
-									<input class="form-check-input" type="checkbox" checked>
-									<span class="slider round"></span>
-									</label>
-								</span>
+								
 								<a class="dropdown-item" href="/user/<?= htmlentities($row['username']); ?>"><i class="align-middle mr-1" data-feather="user"></i> Profile</a>
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item" href="/settings.php"><i class="align-middle mr-1" data-feather="settings"></i> Settings & Privacy</a>

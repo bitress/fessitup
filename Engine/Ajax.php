@@ -9,14 +9,11 @@ include_once 'E.php';
                 $con->_test();
             
             break;
-        case 'postCFS':
-            $con = new Confession;
-                $con->postConfession($_POST['msg'], $_POST['t'], $_POST['c']);
-            break;
-        case 'postLink':
-            $con = new Confession;
-                $con->postLink($_POST['link']);
-            break;
+
+        // case 'postLink':
+        //     $con = new Confession;
+        //         $con->postLink($_POST['link']);
+        //     break;
         case 'smile':
             $con = new Vote;
                 $con->makeSmile($_POST['id'], $_POST['user']);
@@ -41,6 +38,20 @@ include_once 'E.php';
             $con = new User;
             $update = $con->changePassword($_POST['oldpass'], $_POST['newpass'], $_POST['confirmpass'], $_POST['_token']);
                 if ($update === true) {
+                    echo "true";
+                }
+            break;
+        case 'PasswordReset':
+            $con = new PasswordReset;
+            $reset = $con->RequestResetPassword($_POST['email']);
+                if ($reset === true) {
+                    echo "true";
+                }
+            break;
+        case 'changePasswordbyReset':
+            $con = new PasswordReset;
+            $reset = $con->resetPassword($_POST['password'], $_POST['retype_password'], $_POST['reset_key']);
+                if ($reset === true) {
                     echo "true";
                 }
             break;
@@ -74,9 +85,11 @@ include_once 'E.php';
             }
             break; 
         case '2FAChallenge':
-            $con = new Login;
-               $update = $con->_2faLogin($_POST['code']);
-            if ($update === true) {
+            $con = new TwoFactorAuthentication;
+               $login = $con->_2faLogin($_POST['code']);
+            if ($login === true) {
+                Session::destroy('why');
+                Session::destroy('challenge');
                 echo "true";
             }
             break; 
@@ -90,7 +103,12 @@ include_once 'E.php';
             break; 
         case 'verifySecretKey':
             $con = new TwoFactorAuthentication();
-               $con->verifySecretKey($_POST['secretKey'], $_POST['code']);
+               $con->enable2FA($_POST['secretKey'], $_POST['code']);
+            break; 
+
+        case 'Disable2FA':
+             $con = new TwoFactorAuthentication();
+              $con->disable2FA();
             break; 
         case 'markAsRead':
             $con = new Notification;

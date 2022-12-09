@@ -171,7 +171,7 @@ $birthday = date('j', strtotime($row['birthdate']));
                                     <div class="mb-3">
                                        <label class="form-label" for="inputPasswordCurrent">Confirm password</label>
                                        <input type="password" class="form-control" id="password">
-                                       <small><a href="#">Forgot your password?</a></small>
+                                       <small><a type="button" data-bs-toggle="modal" data-bs-target="#forgotPassword" href="#">Forgot your password?</a></small>
                                     </div>
                                     <button type="submit" id="email_info_btn" class="btn btn-primary">Save changes</button>
                                  </form>
@@ -187,7 +187,7 @@ $birthday = date('j', strtotime($row['birthdate']));
                                     <div class="mb-3">
                                        <label class="form-label" for="inputPasswordCurrent">Current password</label>
                                        <input type="password" class="form-control" id="currentpassword">
-                                       <small><a href="#">Forgot your password?</a></small>
+                                       <small><a type="button" data-bs-toggle="modal" data-bs-target="#forgotPassword" href="#">Forgot your password?</a></small>
                                     </div>
                                     <div class="mb-3">
                                        <label class="form-label" for="inputPasswordNew">New password</label>
@@ -243,7 +243,27 @@ $birthday = date('j', strtotime($row['birthdate']));
                                           </div>
                                        </div>
                                     </div>
-                                    <button type="button" id="privacyNsecurity_btn" class="btn btn-primary">Save changes</button>
+                                    <button type="button" id="privacyNsecurity_btn" class="btn btn-primary mt-2">Save changes</button>
+                                 </form>
+                              </div>
+                           </div>
+
+
+                           <div class="card">
+                              <div class="card-body">
+                                 <h5 class="card-title">Messages</h5>
+                                 <form>
+                                    <div class="row">
+                                       <div class="col-6">
+                                          <div class="form-check">
+                                             <input class="form-check-input" type="checkbox"  id="" >
+                                             <label class="form-check-label" for="flexCheckDefault">
+                                             Do not receive messages
+                                             </label>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <button type="button" id="jashfkj" class="btn btn-primary mt-2">Save changes</button>
                                  </form>
                               </div>
                            </div>
@@ -256,7 +276,7 @@ $birthday = date('j', strtotime($row['birthdate']));
                                        <div class="col-6">
                                           <?php if ($row['is_2fa'] == '1'): ?>
                                           <div class="form-group">
-                                            <button type="button" class="btn btn-danger">Disable two-factor authentication</button>
+                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#disable2fa">Disable two-factor authentication</button>
                                           </div>
                                           <?php else: ?>
                                           <div class="form-group">
@@ -276,7 +296,7 @@ $birthday = date('j', strtotime($row['birthdate']));
                                  <form>
                                     <div class="row">
                                        <div class="col-6">
-                                          <div class="card-text mb-2">Activity</div>
+                                          <div class="card-title mb-2">Activity</div>
                                           <div class="form-check">
                                              <input class="form-check-input" type="checkbox"  id="">
                                              <label class="form-check-label" for="flexCheckDefault">
@@ -302,23 +322,9 @@ $birthday = date('j', strtotime($row['birthdate']));
                                              </label>
                                           </div>
                                        </div>
-                                       <div class="col-6">
-                                          <div class="card-text mb-2">Messages</div>
-                                          <div class="form-check">
-                                             <input class="form-check-input" type="checkbox"  id="" >
-                                             <label class="form-check-label" for="flexCheckDefault">
-                                             Chat messages
-                                             </label>
-                                          </div>
-                                          <div class="form-check">
-                                             <input class="form-check-input" type="checkbox"  id="" >
-                                             <label class="form-check-label" for="flexCheckDefault">
-                                             Chat requests
-                                             </label>
-                                          </div>
-                                       </div>
                                     </div>
-                                    <button type="button" id="notification_btn" class="btn btn-primary">Save changes</button>
+                                       
+                                    <button type="button" id="notification_btn" class="btn btn-primary mt-2">Save changes</button>
                                  </form>
                               </div>
                            </div>
@@ -328,14 +334,36 @@ $birthday = date('j', strtotime($row['birthdate']));
                </div>
             </div>
          </main>
+  
+         
          <?php
             include 'includes/footer.inc.php';
             ?>
       </div>
       </div>
+
+      <div class="modal fade" id="forgotPassword" tabindex="-1" role="dialog" aria-hidden="true">
+                              <div class="modal-dialog modal-dialog-centered" role="document">
+                                 <div class="modal-content">
+                                    <div class="modal-header">
+                                       <h5 class="modal-title">Forgot my Password</h5>
+                                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body m-3">
+                                       <p class="mb-1">To continue, please enter your email for recovery.</p>
+                                       <div class="form-group">
+                                                <input type="email" id="forgotPasswordEmail" class="form-control" placeholder="Enter your Email">
+                                             </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                       <button type="button" id="forgotPasswordBtn" data-bs-dismiss="modal" class="btn btn-primary">Reset Password</button>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
       <!-- Modal -->
          <div class="modal fade" id="validatePass" tabindex="-1" role="dialog" aria-hidden="true">
-										<div class="modal-dialog" role="document">
+										<div class="modal-dialog modal-dialog-centered" role="document">
 											<div class="modal-content">
 												<div class="modal-header">
 													<h5 class="modal-title">Set up two-factor authentication</h5>
@@ -355,21 +383,24 @@ $birthday = date('j', strtotime($row['birthdate']));
 									</div>
 
          <div class="modal fade" id="2FASetup" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
-										<div class="modal-dialog" role="document">
+										<div class="modal-dialog modal-dialog-centered" role="document">
 											<div class="modal-content">
 												<div class="modal-header">
 													<h5 class="modal-title">Set up two-factor authentication</h5>
 													<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 												</div>
 												<div class="modal-body m-3">
-													<p class="mb-0">Now, Let's get started.</p>
-                                      <div class="form-group">
-                                         <label for="secretKey">This is your secret key</label>
-                                      <input type="text" readonly class="form-control-plaintext" id="secretKey" value="">
-                                      </div>
-                                       <div class="mb-3" id="qrcode"></div>
-                                       <div class="form-group">
-                                          <input type="number" class="form-control" name="6digitcode" id="6digitcode" placeholder=" Digit Verification Code">
+                                    <p class="mb-3">Now, Let's get started.</p>
+                                          <div class="d-flex justify-content-sm-center">		
+                                       <div class="mb-3 border border-1" id="qrcode"></div>
+                                       </div>
+
+                                      <p id="secretKey" class="fs-4 fw-bold text-center text-uppercase border border-secondary"></p>                
+
+
+                                       <div class="form-floating">
+                                          <input type="number" class="form-control" name="6digitcode" id="6digitcode" placeholder="6 Digit Verification Code">
+                                          <label for="6digitcode">6 Digit Verification Code</label>
                                              </div>
 												</div>
 												<div class="modal-footer">
@@ -378,13 +409,35 @@ $birthday = date('j', strtotime($row['birthdate']));
 											</div>
 										</div>
 									</div>
+
+             <div class="modal fade" id="disable2fa" tabindex="-1" role="dialog" aria-hidden="true">
+                              <div class="modal-dialog modal-dialog-centered" role="document">
+                                 <div class="modal-content">
+                                    <div class="modal-header">
+                                       <h5 class="modal-title">Disable two-factor authentication</h5>
+                                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body m-3">
+                                       <p class="mb-0">To continue, please enter your password for verification.</p>
+                                       <div class="form-group">
+                                                <input type="password" id="2fadisablepassword" class="form-control" placeholder="Enter your Password">
+                                             </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                       <button type="button" id="disable2faBtn" data-bs-dismiss="modal" class="btn btn-danger">Turn off</button>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+
       <script src="<?=BASE_URL?>/dist/js/app.js"></script>
       <script src="<?=BASE_URL?>/vendor/jquery/jquery.min.js"></script>
       <script src="<?= BASE_URL ?>/assets/js/toastr.js"></script>
       <script src="<?= BASE_URL ?>/vendor/jquery-toast/src/jquery.toast.js"></script>
       <script src="<?= BASE_URL ?>/vendor/qrcodejs/qrcode.min.js"></script>
       <script src="<?= BASE_URL ?>/assets/js/settings.js"></script>
-      <script src="<?= BASE_URL ?>/assets/js/semanticdate.js"></script>
+      <script src="<?= BASE_URL ?>/assets/js/reset-password.js"></script>
       <script src="<?= BASE_URL ?>/assets/js/sha512.min.js"></script>
    </body>
 </html>

@@ -22,8 +22,8 @@ $(document).ready(function () {
         $('#cfs_btn').html('<i class="fa fa-spinner fa-spin"></i> &nbsp; Confessing...')
 
       },
-      success: function () {
-        location.reload();
+      success: function (res) {
+        window.location.href = '/c/'+res;
       }
     });
   });
@@ -88,8 +88,13 @@ $(document).on('click', '.notification', function () {
         action: 'markAsRead',
         id: notif_id
       },
-      success: function (data) {
-        window.location.href = target;
+      success: function () {
+        window.location.href = '/'+ target;
       }
     });
   });
+
+setTimeout(function () {
+  $('.loading-skeleton').removeClass('loading-skeleton');
+  
+}, 3000);

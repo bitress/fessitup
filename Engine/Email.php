@@ -11,7 +11,7 @@
     
             $link = REGISTER_CONFIRM . "?key=" . $key;
     
-            $body = file_get_contents('../templates/confirmation-mail.php');
+            $body = file_get_contents('../includes/confirmation-mail.php');
     
             $body = str_replace('{{website_name}}','FessItUp', $body);
             $body = str_replace('{{link}}',$link, $body);
@@ -24,6 +24,34 @@
                 echo 'Mailer Error: ' . $mail->ErrorInfo;
                 exit;
             }
+        }
+
+        function sendResetPassword($email, $token) {
+
+            require_once '../vendor/phpmailer/PHPMailerAutoload.php';
+
+            $mail = $this->_getMailer();
+
+            $mail->addAddress($email);
+    
+            $link = PASSWORD_RESET . "?token=" . $token;
+    
+            $body = file_get_contents('../includes/password-reset-mail.php');
+    
+            $body = str_replace('{{website_name}}','FessItUp', $body);
+            $body = str_replace('{{link}}',$link, $body);
+    
+            $mail->Subject = "FessItUp - Password Reset";
+            $mail->Body    = $body;
+    
+            if( ! $mail->send() ) {
+                echo 'Message could not be sent. ';
+                echo 'Mailer Error: ' . $mail->ErrorInfo;
+                exit;
+            } else {
+                return true;
+            }
+
         }
 
 
@@ -39,13 +67,13 @@
         // configure mailer to send email via SMTP
         if ( MAILER == 'smtp' )
         {
-            // $mail->isSMTP();
-
+            $mail->isSMTP();
             $mail->Host       = SMTP_HOST;
             $mail->SMTPAuth   = true;
             $mail->Username   = SMTP_USERNAME;
             $mail->Password   = SMTP_PASSWORD;
-            $mail->SMTPSecure = SMTP_ENCRYPTION;
+            $mail->SMTPSecure = 'tls';
+            $mail->Port = 587;
         }
 
         // tell mailer that we are sending HTML email

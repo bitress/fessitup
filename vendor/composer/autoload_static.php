@@ -9,12 +9,22 @@ class ComposerStaticInitdac04342fd4c424a00975dfed00f1d63
     public static $prefixLengthsPsr4 = array (
         'P' => 
         array (
+            'PragmaRX\\Recovery\\' => 18,
+            'PragmaRX\\Random\\' => 16,
             'PragmaRX\\Google2FA\\' => 19,
             'ParagonIE\\ConstantTime\\' => 23,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
+        'PragmaRX\\Recovery\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/pragmarx/recovery/src',
+        ),
+        'PragmaRX\\Random\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/pragmarx/random/src',
+        ),
         'PragmaRX\\Google2FA\\' => 
         array (
             0 => __DIR__ . '/..' . '/pragmarx/google2fa/src',

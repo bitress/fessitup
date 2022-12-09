@@ -49,9 +49,9 @@ $(document).ready(function () {
                     }
                     else {
 
-                         for(var i=0; i<res.errors.length; i++) {
-                            var error = res.errors[i];
-                            showErrorToasts(error, 'Oopsie!');
+                         for(var i=0; i < res.errors.length; i++) {
+                            let error = res.errors[i];
+                            $('#alert_box').append('<div class="alert alert-danger alert-dismissible fade show" role="alert">'+ error +' <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div></div>');                           
                         }
                      $('#signup').html('&nbsp; Register');
 

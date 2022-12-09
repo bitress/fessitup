@@ -1,5 +1,9 @@
 <?php
 require 'Engine/E.php';
+if ($login->_isLoggedIn()) {
+  header('Location: /');
+}
+
 if (!Session::check('challenge')) {
   header('Location: /login');
 }
@@ -29,35 +33,26 @@ if (!Session::check('challenge')) {
 
           <div class="card fat">
             <div class="card-body">
-              <h4 class="card-title">Login</h4>
-
-              <form method="POST" id="__login__"  novalidate="">
+              <h4 class="card-title">Challenge</h4>
               <div id="alert_box"></div>
 
                 <div class="form-group">
-                    <p>Your have turned on Two Factor Authentication</p>
+                    <p>You have turned on Two Factor Authentication</p>
                 </div>
 
                 <div class="form-group">
-                  <label for="code">Code
-                    <a data-toggle="modal" data-target="#fp" class="float-right">
-                      Need help?
-                    </a>
-                  </label>
+                  <label for="code">Code </label>
                   <input id="code" type="number" class="form-control" value="" name="code">
                 </div>
 
                 <div class="form-group m-0">
                   <button type="button" name="challengeBtn" id="challengeBtn" class="btn btn-primary btn-block">
                     Submit Code
-                  </button>
-
-                 
+                  </button>     
                 </div>
                 <div class="mt-4 text-center">
-                  Don't have an account? <a href="#">Register</a>
+                  Not your account? <a href="/login">Login</a>
                 </div>
-              </form>
             </div>
           </div>
 

@@ -9,6 +9,7 @@
 	
 		public function __construct(){
 			$this->db = Database::getInstance();
+			$this->userID = Session::get('user_login');
 
 			$this->mailer = new Email;
 		}
@@ -35,7 +36,7 @@
 				$status = (EMAIL_CONFIRMATION === true) ? '0' : '1' ;
      	
                 //hash password before sending to database
-                $hashed_password = password_hash($password, PASSWORD_ARGON2ID);
+                $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
                 $token = Misc::_generateKey();
 
@@ -189,19 +190,27 @@
 		  * @return boolean TRUE, if email doesnt exist, FALSE otherwise
 		  */
          
- 		public function _validateEmail($email){
+ 		public function _validateEmail($email, $id, $and = false){
+
+			if ($and) {
+
 			
-			$sql = "SELECT email FROM users WHERE email = :e";
+				$q = "AND user_id = :id LIMIT 1";
+			} else {
+				$q = "LIMIT 1";
+			}
+			
+			$sql = "SELECT email FROM users WHERE email = :e {$q}";
 			$stmt = $this->db->prepare($sql);
+$stmt->bindParam(":id", $id, PDO::PARAM_INT);
 			$stmt->bindParam(":e", $email, PDO::PARAM_STR);
 			if($stmt->execute()){
-				$res = $stmt->fetch();
-			if($stmt->rowCount() == 1){
-				
-				return true;
-				
-				}
-     
+				if($stmt->rowCount() == 1){
+					
+					return true;
+					
+					}
+		
 			} else {
 			echo "Oopps! Something went wrong. Please try again later,";
 				}

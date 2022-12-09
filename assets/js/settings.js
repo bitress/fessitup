@@ -243,8 +243,8 @@ $(document).ready(function(e) {
                      data: {action: '2FA'},
                      dataType: 'json',
                      success: function (res) {
-                      // $('#secretKey').html('This is your secret key: &nbsp;' + res.secretCode);
-                      $('#secretKey').val(res.secretCode)
+
+                      $('#secretKey').text(res.secretCode)
                       new QRCode(document.getElementById('qrcode'), res.QrURL)
                      }
                    });
@@ -264,9 +264,10 @@ $(document).ready(function(e) {
 
 $(document).ready(function (){
   $('#confirmSetup').on('click', function () {
+    var setup = new bootstrap.Modal(document.getElementById('2FASetup'));
 
     var code = $('#6digitcode').val();
-    var secretKey = $('#secretKey').val();
+    var secretKey = $('#secretKey').text();
 
       $.ajax({
         type: 'POST',
@@ -276,14 +277,69 @@ $(document).ready(function (){
           code: code,
           secretKey: secretKey
         },
+        beforeSend: function(){
+          $('#confirmSetup').html('<i class="fa fa-spinner fa-spin"></i> &nbsp; Wait...')
+        },
         success: function (res) {
           if (res === 'true') {
+            $('#confirmSetup').html('&nbsp; Confirm');
             showSuccessToasts("You’re two-factor authenticated!");
             setup.hide();
             setTimeout(window.location.reload.bind(window.location), 3000);
+          } else {
+            showErrorToasts('Incorrect code');
+            $('#confirmSetup').html('&nbsp; Confirm')
           }
         }
       })
 
   });
 });
+
+$(document).ready(function(e) {
+  $('#disable2faBtn').on('click', function () {
+    var password = $('#2fadisablepassword').val();
+  
+      var modal = new bootstrap.Modal(document.getElementById('disable2fa'));
+
+
+      password = CryptoJS.SHA512(password).toString();
+
+      $.ajax({
+        type: 'POST',
+        url: '/Engine/Ajax.php',
+        data: {
+            action: 'verifyUser',
+            password: password,
+        },
+        beforeSend: function(){
+            $('#disable2faBtn').html('<i class="fa fa-spinner fa-spin"></i> &nbsp; Wait...')
+        },
+        success: function(result) {
+                if(result === "lol"){
+                    
+                       $.ajax({
+                     type: 'POST',
+                     url: '/Engine/Ajax.php',
+                     data: {action: 'Disable2FA'},
+                     success: function (res) {
+                        if (res === 'true') {
+                      showSuccessToasts("Turned off two factor authentication");
+                      setTimeout(window.location.reload.bind(window.location), 3000);
+                     }
+                   }
+                   });
+
+                } else {
+              
+                    showErrorToasts('Incorrect Password');
+                    $('#disable2faBtn').html('&nbsp; Turn off')
+                    modal.show();
+                }
+        }
+      });
+  });
+})
+
+
+

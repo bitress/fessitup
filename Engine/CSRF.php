@@ -20,6 +20,11 @@ class CSRF {
              return Session::set('csrf', 'csrf_'. $token);
         }
 
+        /**
+         * Check CSRF
+         * @param string $key CSRF key
+         */
+
         public static function check($key){
 
             $csrf_token = Session::get('csrf');

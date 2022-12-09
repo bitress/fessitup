@@ -1,4 +1,9 @@
 <?php
+
+ini_set('display_errors', 0);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 define('DB_HOST', "localhost"); 
 define('DB_TYPE', "mysql"); 
 define('DB_USER', "root");  
@@ -6,14 +11,16 @@ define('DB_PASS', "");
 define('DB_NAME', "fessitup"); 
 
 // define('BASE_URL', 'http://192.168.43.160');
-// define('BASE_URL', 'http://localhost:8000');
-define('BASE_URL','http://'. $_SERVER['HTTP_HOST']);
+ define('BASE_URL', 'http://localhost:8080');
+//define('BASE_URL','http://'. $_SERVER['HTTP_HOST'].'/fessitup');
 
 define('SITE_NAME', 'FessItUp');
 
 define('CHALLENGE_URL', BASE_URL . '/challenge.php');
 define('EMAIL_CONFIRMATION', true); 
+
 define('REGISTER_CONFIRM', BASE_URL .'/confirm.php');
+define('PASSWORD_RESET', BASE_URL .'/reset-password.php');
 
 
 define('MAILER', "smtp"); 
